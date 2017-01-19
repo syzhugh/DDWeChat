@@ -92,6 +92,11 @@ public class MsgAreaFriend extends JPanel implements UpdateHandler {
 			@Override
 			public void UI_do(MouseEvent e) {
 				int index = mlist.locationToIndex(e.getPoint());
+				System.out.println("slelect index:" + index);
+				if (index == -1) {
+					return;
+				}
+
 				CheckableItem item = (CheckableItem) mlist.getModel().getElementAt(index);
 				item.setSelected(!item.isSelected());
 				Rectangle rect = mlist.getCellBounds(index, index);

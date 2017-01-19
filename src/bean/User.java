@@ -5,11 +5,23 @@ import java.util.List;
 
 import org.apache.http.cookie.Cookie;
 
-
 import utility.HttpUtils;
 import utility.HttpUtils.DefaultCallback;
 
 public class User {
+
+	private static User user;
+
+	public static User getInstance() {
+		if (user == null) {
+			synchronized (User.class) {
+				if (user == null) {
+					user = new User();
+				}
+			}
+		}
+		return user;
+	}
 
 	// error time
 	private int num = 0;
@@ -33,7 +45,7 @@ public class User {
 	private String _webwx_data_ticket;
 	private String _webwx_auth_ticket;
 
-	public User() {
+	private User() {
 		normalList = new ArrayList<Normal>();
 		grouplList = new ArrayList<Group>();
 	}

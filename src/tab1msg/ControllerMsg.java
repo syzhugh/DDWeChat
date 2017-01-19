@@ -5,13 +5,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.SwingWorker;
+
 import tab1msg.Tab1Msg.OperateHandler;
+import utility.HttpUtils;
+import utility.HttpUtils.DefaultCallback;
 
 import bean.Group;
 import bean.Member;
 import bean.Normal;
 
-public class ControllerMsg implements OperateHandler {
+public class ControllerMsg implements OperateHandler, DefaultCallback {
 
 	public static final int CODE_ADD = 0x10;
 	public static final int CODE_SEND = 0x11;
@@ -37,10 +41,6 @@ public class ControllerMsg implements OperateHandler {
 
 	public void addObservers(String tag, UpdateHandler arg0) {
 		observers.put(tag, arg0);
-	}
-
-	public interface UpdateHandler {
-		void dispatchMsg(int code, Object obj);
 	}
 
 	@Override
@@ -70,8 +70,38 @@ public class ControllerMsg implements OperateHandler {
 	}
 
 	@Override
-	public void send() {
+	public void send(final String text, final String filePath) {
+		SwingWorker worker = new SwingWorker() {
 
+			@Override
+			protected Object doInBackground() throws Exception {
+				List<Member> list = new ArrayList<Member>();
+				list.addAll(list_group);
+				list.addAll(list_normal);
+				if (text != null) {
+					HttpUtils.sendMsg(text, list, ControllerMsg.this);
+				} else if (filePath != null) {
+					HttpUtils.sendMedia(filePath, list, ControllerMsg.this);
+				}
+				return null;
+			}
+
+		};
+		worker.execute();
+	}
+
+	@Override
+	public void result(int i, boolean bool, String result) {
+
+	}
+
+	@Override
+	public int size() {
+		return list_group.size() + list_normal.size();
+	}
+
+	public interface UpdateHandler {
+		void dispatchMsg(int code, Object obj);
 	}
 
 }

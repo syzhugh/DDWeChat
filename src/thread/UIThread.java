@@ -77,7 +77,8 @@ public class UIThread extends BaseTHread implements _Controller.cCallback {
 		toast_qrcode = new JDialog(jFrame, "二维码");
 		toast_qrcode.setSize(500, 500);
 		toast_qrcode.setLocationRelativeTo(null);
-		toast_errormsg = new JOptionPane("异常", JOptionPane.ERROR_MESSAGE);
+
+		toast_errormsg = new JOptionPane("提示", JOptionPane.ERROR_MESSAGE);
 	}
 
 	@Override
@@ -106,6 +107,7 @@ public class UIThread extends BaseTHread implements _Controller.cCallback {
 		case 2:// login
 			break;
 		case 5:
+			toast_qrcode.setVisible(false);
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {

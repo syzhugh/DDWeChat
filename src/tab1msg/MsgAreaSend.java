@@ -10,8 +10,11 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.SwingWorker;
+import javax.swing.filechooser.FileFilter;
 
 import mlistener.MActionListener;
 
@@ -24,8 +27,9 @@ public class MsgAreaSend extends JPanel implements UpdateHandler {
 	private JButton bt_top_pic, bt_top_file;
 	private JButton bt_txt_del, bt_txt_send;
 
-	private JFileChooser fileChooser;
 	private OperateHandler opHandler;
+
+	private JFileChooser fileChooser;
 
 	public void setOpHandler(OperateHandler opHandler) {
 		this.opHandler = opHandler;
@@ -35,14 +39,30 @@ public class MsgAreaSend extends JPanel implements UpdateHandler {
 		setLayout(new BorderLayout());
 		setBorder(BorderFactory.createEtchedBorder());
 
-		initFileChooser();
+		initTools();
+
 		addComponent();
 		addEvent();
+	}
 
+	private void initTools() {
+		fileChooser = new JFileChooser();
+		fileChooser.setFileFilter(new FileFilter() {
+
+			@Override
+			public String getDescription() {
+				return ".doc,.png,.jpg";
+			}
+
+			@Override
+			public boolean accept(File f) {
+				return f.getName().endsWith(".doc") || f.getName().endsWith(".jpg") || f.getName().endsWith(".png");
+			}
+		});
 	}
 
 	private void initFileChooser() {
-		fileChooser = new JFileChooser();
+
 	}
 
 	private void addEvent() {
@@ -61,13 +81,24 @@ public class MsgAreaSend extends JPanel implements UpdateHandler {
 				int showDialog = fileChooser.showDialog(new JLabel(), "选择");
 				if (showDialog == JFileChooser.APPROVE_OPTION) {
 					File file = fileChooser.getSelectedFile();
-					text.setText(file.getAbsolutePath());
+					if (opHandler.size() > 0 && file.exists()) {
+						int selection = JOptionPane.showConfirmDialog(MsgAreaSend.this, "确认发送" + file.getName() + "?", "发送", JOptionPane.OK_CANCEL_OPTION);
+						System.out.println(selection);
+
+						if (selection == 0) {
+							opHandler.send(null, file.getAbsolutePath());
+						}
+
+					} else if (opHandler.size() == 0) {
+						JOptionPane.showMessageDialog(MsgAreaSend.this, "选择人数为0", "异常", JOptionPane.WARNING_MESSAGE);
+					} else if (!file.exists()) {
+						JOptionPane.showMessageDialog(MsgAreaSend.this, "文件不存在", "异常", JOptionPane.WARNING_MESSAGE);
+					}
 				}
 			}
 		});
 
 		bt_txt_del.addActionListener(new MActionListener() {
-
 			@Override
 			public void UI_do() {
 				text.setText("");
@@ -78,7 +109,17 @@ public class MsgAreaSend extends JPanel implements UpdateHandler {
 
 			@Override
 			public void UI_do() {
-
+				if (text.getText().equals("") || text.getText() == null) {
+					JOptionPane.showMessageDialog(MsgAreaSend.this, "文本为空", "异常", JOptionPane.WARNING_MESSAGE);
+				} else if (opHandler.size() == 0) {
+					JOptionPane.showMessageDialog(MsgAreaSend.this, "选择人数为0", "异常", JOptionPane.WARNING_MESSAGE);
+				} else {
+					int selection = JOptionPane.showConfirmDialog(MsgAreaSend.this, "确认发送信息?", "发送", JOptionPane.OK_CANCEL_OPTION);
+					System.out.println(selection);
+					if (selection == 0) {
+						opHandler.send(text.getText(), null);
+					}
+				}
 			}
 		});
 	}

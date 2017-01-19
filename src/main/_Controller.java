@@ -20,7 +20,7 @@ public class _Controller implements HttpUtils.DefaultCallback {
 	private cCallback view;
 
 	public _Controller(cCallback callback) {
-		this.user = new User();
+		this.user = User.getInstance();
 		user.setDeviceId("e000000000000000");
 
 		this.view = callback;

@@ -41,8 +41,8 @@ public class MsgAreaInfo extends JPanel implements UpdateHandler {
 	}
 
 	private void addComponent() {
-		count_normal = new JLabel();
-		count_group = new JLabel();
+		count_normal = new JLabel("好友：0");
+		count_group = new JLabel("群聊：0");
 		add(count_normal);
 		add(count_group);
 	}
@@ -51,6 +51,6 @@ public class MsgAreaInfo extends JPanel implements UpdateHandler {
 	public void dispatchMsg(int code, Object obj) {
 		String[] counts = ((String) obj).split(",");
 		count_normal.setText("好友：" + counts[0]);
-		count_group.setText("群组：" + counts[1]);
+		count_group.setText("群聊：" + counts[1]);
 	}
 }

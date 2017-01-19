@@ -82,6 +82,8 @@ public class Tab1Msg extends JPanel implements UpdateHandler {
 	public interface OperateHandler {
 		void add(boolean add, int type, Member member);
 
-		void send();
+		int size();
+
+		void send(String text, String filePath);
 	}
 }
