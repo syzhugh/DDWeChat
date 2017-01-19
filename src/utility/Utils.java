@@ -61,7 +61,7 @@ public class Utils {
 					} else if ("wxsid".equals(parser.getName())) {
 						user.setWxsid(parser.nextText());
 					} else if ("wxuin".equals(parser.getName())) {
-						user.setWxuin(parser.nextText());
+						user.setWxuin(Integer.parseInt(parser.nextText()));
 					} else if ("pass_ticket".equals(parser.getName())) {
 						user.setPass_ticket(parser.nextText());
 					}

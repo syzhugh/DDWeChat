@@ -70,16 +70,19 @@ public class HttpUtils {
 	public static final int DOGET = 0;
 	public static final int DOPOST = 1;
 
+	public static final String appid = "wx782c26e4c19acffb";
+	public static final String fileAppid = "wxeb7ec651dd0aefa9";
+
 	public interface DefaultCallback {
 		void result(int i, boolean bool, String result);
 	}
 
 	public static void getUUID(DefaultCallback callback) {
 		System.out.println("----------------------getUUID");
-		String str_url = "https://login.wx.qq.com/jslogin";
+		String str_url = "https://login.wx2.qq.com/jslogin";
 
 		List<NameValuePair> list = new ArrayList<NameValuePair>();
-		BasicNameValuePair param1 = new BasicNameValuePair("appid", "wx782c26e4c19acffb");
+		BasicNameValuePair param1 = new BasicNameValuePair("appid", appid);
 		BasicNameValuePair param2 = new BasicNameValuePair("redirect_uri", "https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxnewloginpage");
 		BasicNameValuePair param3 = new BasicNameValuePair("fun", "new");
 		BasicNameValuePair param4 = new BasicNameValuePair("lang", "zh_CN");
@@ -685,8 +688,8 @@ public class HttpUtils {
 				JSONObject jsonParam = new JSONObject();
 				JSONObject msg = new JSONObject();
 
-				String format = "<appms appid='wx782c26e4c19acffb' sdkver=''><title>%s</title><des></des><action></action><type>6</type><content></content><url></url><lowurl></lowurl><appattach><totallen>%s</totallen><attachid>%s</attachid><fileext>doc</fileext></appattach><extinfo></extinfo></appmsg>";
-				String content = String.format(format, file.getName(), String.valueOf(file.length()), mediaId);
+				String format = "<appmsg appid='%s' sdkver=''><title>%s</title><des></des><action></action><type>6</type><content></content><url></url><lowurl></lowurl><appattach><totallen>%s</totallen><attachid>%s</attachid><fileext>doc</fileext></appattach><extinfo></extinfo></appmsg>";
+				String content = String.format(format, fileAppid, file.getName(), String.valueOf(file.length()), mediaId);
 
 				msg.put("ClientMsgId", String.valueOf(System.currentTimeMillis()));
 				msg.put("LocalID", String.valueOf(System.currentTimeMillis()));
@@ -698,8 +701,11 @@ public class HttpUtils {
 				jsonParam.put("BaseRequest", new JSONObject(temp.getBaseRequest()));
 				jsonParam.put("Msg", msg);
 				jsonParam.put("Scene", 0);
-				System.out.println("***" + jsonParam.toString().replace("\"Content\":\"\"", String.format("\"Content\":\"%s\"", content)));
-				StringEntity body = new StringEntity(jsonParam.toString().replace("\"Content\":\"\"", String.format("\"Content\":\"%s\"", content)), "utf-8");
+
+				String mcontent = jsonParam.toString().replace("\"Content\":\"\"", String.format("\"Content\":\"%s\"", content));
+				System.out.println(mcontent);
+				StringEntity body = new StringEntity(mcontent, "utf-8");
+
 				post.setHeader("Accept", "application/json, text/plain, */*");
 				post.setHeader("Accept-Encoding", "gzip, deflate, br");
 				post.setHeader("Accept-Language", "zh-CN,zh;q=0.8");
@@ -707,7 +713,7 @@ public class HttpUtils {
 				post.setHeader("ContentType", "application/json; charset=UTF-8");
 				post.setHeader("Host", "wx2.qq.com");
 				post.setHeader("Origin", "https://wx2.qq.com/");
-				post.setHeader("Referer", "https://wx2.qq.com/");
+				post.setHeader("Referer", "https://wx2.qq.com/?&lang=zh_CN");
 				post.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36");
 				post.setEntity(body);
 

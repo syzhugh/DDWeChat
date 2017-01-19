@@ -34,7 +34,8 @@ public class User {
 
 	// login
 	private String currentUser;
-	private String skey, wxsid, wxuin, pass_ticket, baseRequest;
+	private String skey, wxsid, pass_ticket, baseRequest;
+	private int wxuin;
 
 	// getContacts
 	private List<Normal> normalList;
@@ -151,11 +152,11 @@ public class User {
 		this.wxsid = wxsid;
 	}
 
-	public String getWxuin() {
+	public int getWxuin() {
 		return wxuin;
 	}
 
-	public void setWxuin(String wxuin) {
+	public void setWxuin(int wxuin) {
 		this.wxuin = wxuin;
 	}
 
