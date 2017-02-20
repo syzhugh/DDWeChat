@@ -66,7 +66,7 @@ import bean.User;
 import sun.org.mozilla.javascript.internal.ast.ForInLoop;
 
 public class HttpUtils {
-
+	
 	public static final int DOGET = 0;
 	public static final int DOPOST = 1;
 
@@ -348,7 +348,6 @@ public class HttpUtils {
 			JSONObject jsonParam = new JSONObject();
 			jsonParam.put("BaseRequest", new JSONObject(temp.getBaseRequest()));
 			StringEntity body = new StringEntity(jsonParam.toString(), "utf-8");// 解决中文乱码问题
-
 			post.setHeader("ContentType", "application/json; charset=UTF-8");
 			post.setEntity(body);
 
@@ -602,7 +601,11 @@ public class HttpUtils {
 					.addTextBody("lastModifieDate", sdf.format(fileDate) + "GMT+0800 (中国标准时间)").addTextBody("size", String.valueOf(file.length()))
 					.addTextBody("mediatype", mediatype).addTextBody("uploadmediarequest", uploadmediarequest.toString())
 					.addTextBody("webwx_data_ticket", temp.get_webwx_data_ticket()).addTextBody("pass_ticket", temp.getPass_ticket())
-					.addBinaryBody("filename", new FileInputStream(file), ContentType.DEFAULT_BINARY, file.getName()).build();
+					.addBinaryBody("filename", new FileInputStream(file), ContentType.DEFAULT_BINARY, file.getName())
+					
+					.build();
+			
+			
 
 			HttpClient client = new SSLClient();
 
@@ -619,6 +622,7 @@ public class HttpUtils {
 			post.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36");
 
 			post.setEntity(httpEntity);
+			
 
 			HttpResponse response = client.execute(post);
 
